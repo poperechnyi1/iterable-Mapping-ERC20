@@ -1,13 +1,13 @@
 pragma solidity ^0.4.15;
 
-import "./IterableMapping.sol";
+import "./itMapsLib.sol";
 import "./ERC20Interface.sol";
 
 
 contract IterableTry is ERC20Interface{
 
-      using IterableMapping for IterableMapping.itmap;
-      IterableMapping.itmap data;
+      using itMaps for itMaps.itMapAddressUint;
+      itMaps.itMapAddressUint data;
 
       string public constant symbol = "SPT";
       string public constant name = "Stepan Tokens";
@@ -31,33 +31,12 @@ contract IterableTry is ERC20Interface{
           _;
       }
 
-      //insert owners and balances
-      function insert(address k, uint v) returns (uint size)
-      {
-            // Actually calls itmap_impl.insert, auto-supplying the first parameter for us.
-            IterableMapping.insert(data, k, v);
-            // We can still access members of the struct - but we should take care not to mess with them.
-            return data.size;
-      }
-
-      //get balance of address
-      function getBalancesFromInterableMapping(address _owner) returns (uint balance){
-            for (var i = IterableMapping.iterate_start(data); IterableMapping.iterate_valid(data, i); i = IterableMapping.iterate_next(data, i))
-            {
-                // var (key, value) = IterableMapping.iterate_get(data, i);
-                // s += value;
-
-            }
-      }
-
-        
-   
       // Constructor
-      function IterableMapp() {
+      function IterableTry() {
           owner = msg.sender;
           
           balances[owner] = _totalSupply;
-          insert(owner,  _totalSupply);
+          
       }
    
       function totalSupply() constant returns (uint256 totalSupply) {

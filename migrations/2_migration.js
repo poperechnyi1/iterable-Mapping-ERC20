@@ -1,8 +1,8 @@
-// var IterableMapp = artifacts.require("./IterableMapp.sol");
-var User = artifacts.require("./User.sol");
+
+var IterableTry = artifacts.require("./IterableTry.sol");
 
 
 
 module.exports = function(deployer) {
-  deployer.deploy(User);
+  deployer.deploy(IterableTry);
 };
