@@ -7,13 +7,15 @@ import "./ERC20Interface.sol";
 contract IterableTry is ERC20Interface{
 
       using itMaps for itMaps.itMapAddressUint;
-      itMaps.itMapAddressUint balancesIterateMap;
+      itMaps.itMapAddressUint balancesIterateMap; //mapp for address instead standart mapp
+      itMaps.itMapAddressUint withdrawMap; //mapp for address per tokens for amount of ether
 
       string public constant symbol = "SPT";
       string public constant name = "Stepan Tokens";
       uint8 public constant decimals = 8;
-      uint public constant amountEtherOnContract = this.balance; 
       uint256 _totalSupply = 10000000000000000;
+      uint public constant amountEtherOnContract = this.balance; 
+   
 
       
       
@@ -98,10 +100,18 @@ contract IterableTry is ERC20Interface{
          return allowed[_owner][_spender];
      }
 
-     function withdraw() returns (bool){
+     function withdrawFunction() returns (bool){
+         uint amountEtherePerOneToken =  amountEtherOnContract/_totalSupply;
+         address currentOwner;
+        
          for(uint i; i<balancesIterateMap.size(); i++){
-
+             withdrawMap.insert(balancesIterateMap.getKeyByIndex(i),balancesIterateMap.getValueByIndex(i) * amountEtherePerOneToken);  //insert amount ether per amount tokens on address in new structure
+             currentOwner = withdrawMap.getKeyByIndex(i);
+             currentOwner.transfer(withdrawMap.getValueByIndex(i));     //transfer etherium on addresses per tokens       
          }
+         
          return true;
      }
+
+   
 }
