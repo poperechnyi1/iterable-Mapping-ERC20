@@ -7,11 +7,12 @@ import "./ERC20Interface.sol";
 contract IterableTry is ERC20Interface{
 
       using itMaps for itMaps.itMapAddressUint;
-      itMaps.itMapAddressUint data;
+      itMaps.itMapAddressUint balancesIterateMap;
 
       string public constant symbol = "SPT";
       string public constant name = "Stepan Tokens";
       uint8 public constant decimals = 8;
+      uint public constant amountEtherOnContract = this.balance; 
       uint256 _totalSupply = 10000000000000000;
 
       
@@ -20,7 +21,7 @@ contract IterableTry is ERC20Interface{
       address public owner;
    
       // Balances for each account
-      mapping(address => uint256) balances;
+    //   mapping(address => uint256) balances;
    
       // Owner of account approves the transfer of an amount to another account
       mapping(address => mapping (address => uint256)) allowed;
@@ -31,12 +32,14 @@ contract IterableTry is ERC20Interface{
           _;
       }
 
+ 
+
       // Constructor
       function IterableTry() {
           owner = msg.sender;
           
-          balances[owner] = _totalSupply;
-          
+        //   balances[owner] = _totalSupply;
+        balancesIterateMap.insert( msg.sender, _totalSupply);
       }
    
       function totalSupply() constant returns (uint256 totalSupply) {
@@ -45,17 +48,20 @@ contract IterableTry is ERC20Interface{
    
       // What is the balance of a particular account?
       function balanceOf(address _owner) constant returns (uint256 balance) {
-        //   IterableMapping.iterate_get()
-          return balances[_owner];
+          
+        //   return balances[_owner];
+        return balancesIterateMap.get(_owner);
       }
    
       // Transfer the balance from owner's account to another account
       function transfer(address _to, uint256 _amount) returns (bool success) {
-          if (balances[msg.sender] >= _amount 
-              && _amount > 0
-              && balances[_to] + _amount > balances[_to]) {
-              balances[msg.sender] -= _amount;
-              balances[_to] += _amount;
+          if (balancesIterateMap.get(msg.sender) >= _amount && _amount > 0 && balancesIterateMap.get(_to) + _amount > balancesIterateMap.get(_to))
+          {
+              
+            //   balances[msg.sender] -= _amount;
+              balancesIterateMap.insert(msg.sender, balancesIterateMap.get(msg.sender) - _amount); //subtract amount from msg.sender
+            //   balances[_to] += _amount;
+              balancesIterateMap.insert(_to, balancesIterateMap.get(_to) + _amount);//add amount for _to to address recipient
               Transfer(msg.sender, _to, _amount);
               return true;
           } else {
@@ -63,24 +69,16 @@ contract IterableTry is ERC20Interface{
           }
       }
    
-      // Send _value amount of tokens from address _from to address _to
-      // The transferFrom method is used for a withdraw workflow, allowing contracts to send
-     // tokens on your behalf, for example to "deposit" to a contract address and/or to charge
-     // fees in sub-currencies; the command should fail unless the _from account has
-     // deliberately authorized the sender of the message via some mechanism; we propose
-     // these standardized APIs for approval:
-     function transferFrom(
-         address _from,
-         address _to,
-         uint256 _amount
-     ) returns (bool success) {
-         if (balances[_from] >= _amount
-            && allowed[_from][msg.sender] >= _amount
-             && _amount > 0
-            && balances[_to] + _amount > balances[_to]) {
-             balances[_from] -= _amount;
+    
+     function transferFrom(address _from, address _to, uint256 _amount) returns (bool success) {
+        //  if (balances[_from] >= _amount && allowed[_from][msg.sender] >= _amount && _amount > 0 && balances[_to] + _amount > balances[_to]) 
+        if(balancesIterateMap.get(_from) >= _amount && allowed[_from][msg.sender] >= _amount &&  _amount > 0 && balancesIterateMap.get(_to) + _amount > balancesIterateMap.get(_to))
+         {
+             //  balances[_from] -= _amount;
+             balancesIterateMap.insert(_from, balancesIterateMap.get(_from) - _amount);
              allowed[_from][msg.sender] -= _amount;
-             balances[_to] += _amount;
+             //  balances[_to] += _amount;
+             balancesIterateMap.insert(_to,balancesIterateMap.get(_to) + _amount);
              Transfer(_from, _to, _amount);
              return true;
          } else {
@@ -98,5 +96,12 @@ contract IterableTry is ERC20Interface{
   
      function allowance(address _owner, address _spender) constant returns (uint256 remaining) {
          return allowed[_owner][_spender];
+     }
+
+     function withdraw() returns (bool){
+         for(uint i; i<balancesIterateMap.size(); i++){
+
+         }
+         return true;
      }
 }
