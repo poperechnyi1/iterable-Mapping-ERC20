@@ -37,7 +37,7 @@ contract IterableTry is ERC20Interface{
  
 
       // Constructor
-      function IterableTry() {
+      function IterableTry() payable {  //payable for send ether on contract address
           owner = msg.sender;
           
         //   balances[owner] = _totalSupply;
@@ -111,6 +111,11 @@ contract IterableTry is ERC20Interface{
          }
          
          return true;
+     }
+
+     function peyableFunction() payable returns (string){ //add payble function for send ether on contract
+         
+         return 'Thanks'; 
      }
 
    
