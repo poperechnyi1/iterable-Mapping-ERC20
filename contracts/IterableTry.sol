@@ -1,10 +1,12 @@
 pragma solidity ^0.4.15;
 
-import "contracts/IterableMapping.sol";
+import "./IterableMapping.sol";
 import "./ERC20Interface.sol";
 
 
-contract IterableMapp is ERC20Interface{
+contract IterableTry is ERC20Interface{
+
+      using IterableMapping for IterableMapping.itmap;
       IterableMapping.itmap data;
 
       string public constant symbol = "SPT";
@@ -30,7 +32,7 @@ contract IterableMapp is ERC20Interface{
       }
 
       //insert owners and balances
-      function insertInStructure(uint k, uint v) returns (uint size)
+      function insert(address k, uint v) returns (uint size)
       {
             // Actually calls itmap_impl.insert, auto-supplying the first parameter for us.
             IterableMapping.insert(data, k, v);
@@ -48,14 +50,14 @@ contract IterableMapp is ERC20Interface{
             }
       }
 
-        this.insertInStructure(owner,  _totalSupply);
+        
    
       // Constructor
       function IterableMapp() {
           owner = msg.sender;
           
           balances[owner] = _totalSupply;
-          
+          insert(owner,  _totalSupply);
       }
    
       function totalSupply() constant returns (uint256 totalSupply) {

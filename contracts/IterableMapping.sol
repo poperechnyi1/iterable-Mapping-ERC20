@@ -5,13 +5,13 @@ library IterableMapping
 {
   struct itmap
   {
-    mapping(uint => IndexValue) data;
+    mapping(address => IndexValue) data;
     KeyFlag[] keys;
     uint size;
   }
   struct IndexValue { uint keyIndex; uint value; }
-  struct KeyFlag { uint key; bool deleted; }
-  function insert(itmap storage self, uint key, uint value) returns (bool replaced)
+  struct KeyFlag { address key; bool deleted; }
+  function insert(itmap storage self, address key, uint value) returns (bool replaced)
   {
     uint keyIndex = self.data[key].keyIndex;
     self.data[key].value = value;
@@ -26,7 +26,7 @@ library IterableMapping
       return false;
     }
   }
-  function remove(itmap storage self, uint key) returns (bool success)
+  function remove(itmap storage self, address key) returns (bool success)
   {
     uint keyIndex = self.data[key].keyIndex;
     if (keyIndex == 0)
@@ -35,7 +35,7 @@ library IterableMapping
     self.keys[keyIndex - 1].deleted = true;
     self.size --;
   }
-  function contains(itmap storage self, uint key) returns (bool)
+  function contains(itmap storage self, address key) returns (bool)
   {
     return self.data[key].keyIndex > 0;
   }
@@ -54,7 +54,7 @@ library IterableMapping
       keyIndex++;
     return keyIndex;
   }
-  function iterate_get(itmap storage self, uint keyIndex) returns (uint key, uint value)
+  function iterate_get(itmap storage self, uint keyIndex) returns (address key, uint value)
   {
     key = self.keys[keyIndex].key;
     value = self.data[key].value;
