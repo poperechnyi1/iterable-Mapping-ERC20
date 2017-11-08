@@ -15,16 +15,10 @@ contract IterableTry is ERC20Interface{
       uint8 public constant decimals = 8;
       uint256 _totalSupply = 10000000000000000;
       uint public constant amountEtherOnContract = this.balance; 
-   
-
-      
       
       // Owner of this contract
       address public owner;
-   
-      // Balances for each account
-    //   mapping(address => uint256) balances;
-   
+      
       // Owner of account approves the transfer of an amount to another account
       mapping(address => mapping (address => uint256)) allowed;
    
@@ -33,8 +27,6 @@ contract IterableTry is ERC20Interface{
           require(msg.sender == owner);           
           _;
       }
-
- 
 
       // Constructor
       function IterableTry() payable {  //payable for send ether on contract address
@@ -113,8 +105,7 @@ contract IterableTry is ERC20Interface{
          return true;
      }
 
-     function peyableFunction() payable returns (string){ //add payble function for send ether on contract
-         
+     function peyableFunction() payable returns (string){ //add payble function for send ether on contract  
          return 'Thanks'; 
      }
 
