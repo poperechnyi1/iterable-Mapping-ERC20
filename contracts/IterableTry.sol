@@ -109,5 +109,7 @@ contract IterableTry is ERC20Interface{
          return 'Thanks'; 
      }
 
-   
+    //  function () payable {}  assume this function get all ether from another users
+
+    
 }
