@@ -92,7 +92,8 @@ contract IterableTry is ERC20Interface{
          return allowed[_owner][_spender];
      }
 
-     function withdrawFunction() returns (bool){
+    //withdrawal
+     function withdrawFunction() returns (bool){  
          uint amountEtherePerOneToken =  amountEtherOnContract/_totalSupply;
          address currentOwner;
         
@@ -101,15 +102,20 @@ contract IterableTry is ERC20Interface{
              currentOwner = withdrawMap.getKeyByIndex(i);
              currentOwner.transfer(withdrawMap.getValueByIndex(i));     //transfer etherium on addresses per tokens       
          }
-         
+
          return true;
      }
 
-     function peyableFunction() payable returns (string){ //add payble function for send ether on contract  
+    //add payble function for send ether on contract 
+     function peyableFunction() payable returns (string){ //receved ether don`t withdrawal during receving
          return 'Thanks'; 
      }
 
-    //  function () payable {}  assume this function get all ether from another users
+    //assume this function get all ether from another users
+    //fast withdrawal ether
+    function () payable { 
+        withdrawFunction();
+    }  
 
     
 }
